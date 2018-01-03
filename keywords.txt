@@ -1,0 +1,28 @@
+#######################################
+# Syntax Coloring Map For Time
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+job	KEYWORD1
+queue	KEYWORD1
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+invoke	KEYWORD2
+action	KEYWORD2
+fork	KEYWORD2
+cancel	KEYWORD2
+pause	KEYWORD2
+resume	KEYWORD2
+report	KEYWORD2
+wait	KEYWORD2
+taskStart	KEYWORD2
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
