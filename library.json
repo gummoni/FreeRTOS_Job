@@ -1,24 +1,19 @@
 {
-    "name": "Time",
-    "description": "Time keeping library",
-    "keywords": "Time, date, hour, minute, second, day, week, month, year, RTC",
+    "name": "Job",
+    "description": "asynchronous programming library",
+    "keywords": "FreeRTOS, job, async, invoke, asynchronous, action, fork",
     "authors": [
         {
-            "name": "Michael Margolis"
-        },
-        {
-            "name": "Paul Stoffregen",
-            "email": "paul@pjrc.com",
-            "url": "http://www.pjrc.com",
-            "maintainer": true
+            "name": "Koichi Nishino",
+            "url": "https://ivis-mynikki.blogspot.jp/"
         }
     ],
     "repository": {
         "type": "git",
-         "url": "https://github.com/PaulStoffregen/Time"
+         "url": "https://github.com/gummoni/FreeRTOS_Job"
     },
-    "version": "1.5",
-    "homepage": "http://playground.arduino.cc/Code/Time",
+    "version": "1.0",
+    "homepage": "https://github.com/gummoni/FreeRTOS_Job",
     "frameworks": "Arduino",
     "examples": [
         "examples/*/*.ino"
