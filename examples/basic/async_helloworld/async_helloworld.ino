@@ -1,11 +1,10 @@
+#include "queue.h"
+
 class example01 {
    private:
     queue que;
 
     static void func(job* parameter) {
-      example01* sender = parameter->sender;
-      void* arg = parameter->arg;
-      void* ret = parameter->result;
       Serial.println("hello world");
     }
 

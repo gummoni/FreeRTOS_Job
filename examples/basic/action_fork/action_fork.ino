@@ -1,8 +1,13 @@
+#include "queue.h"
+
+#define D1  (1)
+#define LED (2)
+
 class ledModule {
   private:
     queue que;
 
-    void blink(void* p) {
+    static void blink(job* p) {
       digitalWrite(LED, true);
       delay(500);
       digitalWrite(LED, false);
@@ -24,7 +29,7 @@ class serialModule {
   private:
     queue que;
 
-    void write(void* p) {
+    static void write(job* p) {
       int arg = *((int*)p->arg);
       Serial.println(arg);
     }
@@ -36,7 +41,7 @@ class serialModule {
     }
 
     job* writeAsync(int* value) {
-      return que.invoke(this, write, value, NULL);
+      return que.invoke(this, write, (void*)value, NULL);
     }
 };
 
@@ -45,7 +50,7 @@ class DINModule {
   private:
     queue que;
 
-    void read(void* p) {
+    static void read(job* p) {
       int* ret = (int*)p->result;
       *ret = digitalRead(D1);
     }
@@ -57,7 +62,7 @@ class DINModule {
     }
 
     job* readAsync(int* result) {
-      return que.invoke(this, read, NULL, result);
+      return que.invoke(this, read, NULL, (void*)result);
     }
 };
 
@@ -70,13 +75,14 @@ class example02 {
 
     static void func(job* p) {
       int v;
+      example02* sender = (example02*)p->sender;
 
-      job* j1 = d.readAsync(&v);
+      job* j1 = sender->d.readAsync(&v);
       p->action(j1);
 
       job* j2[] = {
-        l.blinkAsync(),
-        s.writeAsync(&v)
+        sender->l.blinkAsync(),
+        sender->s.writeAsync(&v)
       };
       p->fork(j2, 2);
     }
