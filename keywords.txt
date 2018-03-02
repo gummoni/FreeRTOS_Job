@@ -1,27 +1,30 @@
 #######################################
-# Syntax Coloring Map For Time
+# Syntax Coloring Map for MCP23017
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-job	KEYWORD1
-queue	KEYWORD1
+
+JobInfo	KEYWORD1
+Job	KEYWORD1
+Record	KEYWORD1
+Dispatcher	KEYWORD1
+
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-invoke	KEYWORD2
-action	KEYWORD2
-fork	KEYWORD2
-cancel	KEYWORD2
-pause	KEYWORD2
-resume	KEYWORD2
-report	KEYWORD2
-wait	KEYWORD2
-taskStart	KEYWORD2
-#######################################
-# Instances (KEYWORD2)
-#######################################
+
+Invoke	KEYWORD2
+Interrupt	KEYWORD2
+Pause	KEYWORD2
+PauseFlg	KEYWORD2
+Cancel	KEYWORD2
+Report	KEYWORD2
+Wait	KEYWORD2
+Action	KEYWORD2
+Fork	KEYWORD2
+
 
 #######################################
 # Constants (LITERAL1)
