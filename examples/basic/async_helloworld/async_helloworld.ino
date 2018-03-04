@@ -1,31 +1,34 @@
-#include "queue.h"
+#include "Job.h"
 
-class example01 {
-   private:
-    queue que;
+struct example01 {
+  static void hello(job* job) {
+    Serial.print("hello ");
+  }
 
-    static void func(job* parameter) {
-      Serial.println("hello world");
-    }
-
-  public:
-    void init() {
-      Serial.begin(19200);
-      taskStart(&que, "example01", 4096, 3, 1);
-    }
-
-    job* funcAsync() {
-      return que.invoke(this, func, NULL, NULL);
-    }
+  static void world(job* job) {
+    Serial.println("world");
+  }
 };
 
 
-static example01 ex;
+static Dispatcher ex01Worker;
+static example01 ex01;
 
 void setup() {
-  ex.init();
+  Serial.begin(115200);
+
+  //thread start
+#ifdef ESP_H
+  ex01Worker.Start("example01", 4096, 4, 1);
+#else
+  ex01Worker.Start("example01", 128, 4);
+#endif
+
 }
 
 void loop() {
-  ex.funcAsync()->wait();
+  Job* job1 = ex01Worker.Invoke(NULL, example01::hello);
+  Job* job2 = ex01Worker.Invoke(NULL, example01::world);
+
+  job2->Wait();
 }

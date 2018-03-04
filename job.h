@@ -1,35 +1,30 @@
 #pragma once
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
+#include "rtos.h"
+#include "Dispatcher.h"
 
-#define Delay1MS (1 / portTICK_RATE_MS)
 
-class job {
-  private:
-    bool isPause;                       //一時停止
-    bool isCompleted;                   //完了
-    bool isCancel;                        //キャンセル
-    void (*func )(job* );               //実行する処理
+#define Delay1MS (1 / portTICK_PERIOD_MS)
 
-  public:
-    void* sender;                       //呼び出し元インスタンス
-    void* arg;                          //引数
-    void* result;                       //戻り値
-    int state;                          //状態
-    int errorCode;                      //エラーコード
 
-    //受け側
-    void invoke(void* sender, void (*func)(job*), void* arg, void* result);
-    void dispatch();                    //実行
+//非同期処理
+struct Job {
+  void (*Execute)(Job* job);
+  Job* parent;
+  bool is_paused;
+  bool is_canceled;
+  bool is_completed;
+  bool is_scheduled;
+  int progress;
 
-    //送り側
-    void cancel();			                  //キャンセル
-    void pause();			                  //一時停止
-    void resume();			                //再開
-    void report(int state);             //状態通知
-    void wait();			                  //完了待ち
-    void action(job* job);              //実行
-    void fork(job** jobs, int length);  //実行
+  void Init(Job* parent, void (*execute)(Job* job));
+  void Dispatch();
+  void Wait();
+  void Cancel();
+  void Resume();
+  void Pause();
+  void Report(int progress);
+  void Action(Job* job1);
+  void Fork(Job* job1, Job* job2);
+  void Fork(Job* job1, Job* job2, Job* job3);
+  void Fork(Job* job1, Job* job2, Job* job3, Job* job4);
 };
-
