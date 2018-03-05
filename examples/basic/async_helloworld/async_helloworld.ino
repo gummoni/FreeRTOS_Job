@@ -1,11 +1,11 @@
 #include "Job.h"
 
 struct example01 {
-  static void hello(job* job) {
+  static void hello(Job* job) {
     Serial.print("hello ");
   }
 
-  static void world(job* job) {
+  static void world(Job* job) {
     Serial.println("world");
   }
 };

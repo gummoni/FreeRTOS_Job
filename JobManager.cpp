@@ -1,15 +1,13 @@
 #include "Job.h"
-#include "JobManager.h"
-
 
 
 JobManager::JobManager(int capacity) {
   this->capacity = capacity;
   Jobs = new Job[capacity];
-  Init();
+  Initialize();
 }
 
-void JobManager::Init() {
+void JobManager::Initialize() {
   int idx = 0;
   for (idx = 0; idx < capacity; idx++) {
     Jobs[idx].is_completed = true;

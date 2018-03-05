@@ -1,5 +1,4 @@
 #pragma once
-#include "rtos.h"
 
 struct JobManager {
   Job* Jobs;
@@ -7,6 +6,6 @@ struct JobManager {
   int capacity;
 
   JobManager(int capacity);
-  void Init();
+  void Initialize();
   Job* Create(Job* job, void (*execute)(Job* job));
 };
