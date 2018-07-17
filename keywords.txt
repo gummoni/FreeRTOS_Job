@@ -8,10 +8,7 @@
 
 JobInfo	KEYWORD1
 Job	KEYWORD1
-<<<<<<< HEAD
-=======
 Record	KEYWORD1
->>>>>>> ed0070ad85699e264731eaa4c0496b58c3b11f53
 Dispatcher	KEYWORD1
 
 #######################################
@@ -23,24 +20,17 @@ Interrupt	KEYWORD2
 Pause	KEYWORD2
 PauseFlg	KEYWORD2
 Cancel	KEYWORD2
-<<<<<<< HEAD
 Resume	KEYWORD2
-=======
->>>>>>> ed0070ad85699e264731eaa4c0496b58c3b11f53
 Report	KEYWORD2
 Wait	KEYWORD2
 Action	KEYWORD2
 Fork	KEYWORD2
-<<<<<<< HEAD
 Initialize	KEYWORD2
 Dispose	KEYWORD2
 is_paused	KEYWORD2
 is_canceled	KEYWORD2
 is_completed	KEYWORD2
 progress	KEYWORD2
-=======
-
->>>>>>> ed0070ad85699e264731eaa4c0496b58c3b11f53
 
 #######################################
 # Constants (LITERAL1)
