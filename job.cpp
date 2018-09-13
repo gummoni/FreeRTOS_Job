@@ -4,41 +4,50 @@
 void Job::Init(Job* parent, void (*execute)(Job* job)) {
   this->Execute = execute;
   this->parent = (NULL == parent) ? this : parent->parent;
-  is_paused = false;
-  is_canceled = false;
-  is_completed = false;
-  progress = 0;
+  this->is_paused = false;
+  this->is_canceled = false;
+  this->is_completed = false;
+  this->is_scheduled = false;
+  this->progress = 0;
 }
 
-//処理実行
 void Job::Dispatch() {
-  if (parent->is_canceled) {
+  while (this->parent->is_paused) {
+    taskYIELD();
+  }
+  if (this->parent->is_canceled) {
     //キャンセル
   } else {
-    while (parent->is_paused) {
-      taskYIELD();
-    }
-    Execute(parent);
+    this->Execute(parent);
   }
-  is_completed = true;
+  this->is_completed = true;
 }
 
 void Job::Wait() {
-  while (!is_completed) {
+  while (!this->is_completed) {
     taskYIELD();
   }
 }
 
 void Job::Cancel() {
-  parent->is_canceled = true;
+  this->is_canceled = true;
+  if (this->parent != this) {
+    this->parent->Cancel();
+  }
 }
 
 void Job::Resume() {
-  parent->is_paused = false;
+  this->is_paused = false;
+  if (this->parent != this) {
+    this->parent->Resume();
+  }
 }
 
 void Job::Pause() {
-  parent->is_paused = true;
+  this->is_paused = true;
+  if (this->parent != this) {
+    this->parent->Pause();
+  }
 }
 
 void Job::Report(int progress) {
@@ -66,3 +75,4 @@ void Job::Fork(Job* job1, Job* job2, Job* job3, Job* job4) {
   job3->Wait();
   job4->Wait();
 }
+

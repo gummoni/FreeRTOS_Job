@@ -1,49 +1,55 @@
 #include "Job.h"
+#include "JobFactory.h"
+#include "Dispatcher.h"
 
-static JobManager Jobs = JobManager(MAX_JOB_COUNT);		//とりあえず固定でジョブ最大8個
 
 #ifdef ESP_H
-//コンストラクタ処理
 void Dispatcher::Start(const char* name, int size, int priority, int coreId) {
-  //キュー作成とタスク起動
-  queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(Job*));  //MAX_QUEUE_COUNT個 * 4byte(pointer分)
-  xTaskCreatePinnedToCore(TaskMain, name, size, this, priority, &taskHandler, coreId);
+  this->queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(Job*));  //MAX_QUEUE_COUNT個 * 4byte(pointer分)
+  xTaskCreatePinnedToCore(TaskMain, name, size, this, priority, &this->taskHandler, coreId);
 }
 #else//ESP_H
-//コンストラクタ処理
 void Dispatcher::Start(const char* name, int size, int priority) {
-  //キュー作成とタスク起動
-  queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(Job*));  //MAX_QUEUE_COUNT個 * 4byte(pointer分)
-  xTaskCreate(TaskMain, name, size, this, priority, &taskHandler);
+  this->queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(Job*));  //MAX_QUEUE_COUNT個 * 4byte(pointer分)
+  xTaskCreate(TaskMain, name, size, this, priority, &this->taskHandler);
 }
 #endif//ESP_H
 
-
-//処理をキューの後方に積み込む
+//処理移譲
 Job* Dispatcher::Invoke(Job* parent, void (*execute)(Job* job)) {
   Job* job = Jobs.Create(parent, execute);
-  xQueueSend(queueHandler, &job, portMAX_DELAY);
+  TaskHandle_t currentTaskHandler = xTaskGetCurrentTaskHandle();
+  if (currentTaskHandler != this->taskHandler)
+  {
+	job->is_scheduled = true;
+    xQueueSend(this->queueHandler, &job, portMAX_DELAY);
+  }
+
   return job;
 }
 
-
-//処理をキューの前方に積み込む
+//処理移譲（優先順位：高め）
 Job* Dispatcher::Interrupt(Job* parent, void (*execute)(Job* job)) {
   Job* job = Jobs.Create(parent, execute);
-  xQueueSendToFront(queueHandler, &job, portMAX_DELAY);
+  TaskHandle_t currentTaskHandler = xTaskGetCurrentTaskHandle();
+  if (currentTaskHandler != this->taskHandler)
+  {
+	job->is_scheduled = true;
+    xQueueSendToFront(this->queueHandler, &job, portMAX_DELAY);
+  }
+
   return job;
 }
 
-
-//タスクメイン処理
+//ディスパッチャタスクメイン
 void Dispatcher::TaskMain(void* arg) {
   Job* job;
   Dispatcher* self = (Dispatcher*)arg;
-  QueueHandle_t queueHandler = self->queueHandler;
+  QueueHandle_t queues = self->queueHandler;
 
   while (true) {
-    //キューが溜まったら実行
-    xQueueReceive(queueHandler, &job, portMAX_DELAY);
+    xQueueReceive(queues, &job, portMAX_DELAY);
     job->Dispatch();
   }
 }
+

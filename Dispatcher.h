@@ -1,6 +1,7 @@
 #pragma once
 
-struct Dispatcher {
+class Dispatcher {
+  public:
 #ifdef ESP_H
     void Start(const char* name, int size, int priority, int coreId);
 #else//ESP_H
@@ -14,3 +15,4 @@ struct Dispatcher {
     TaskHandle_t taskHandler;
     static void TaskMain(void* arg);
 };
+
