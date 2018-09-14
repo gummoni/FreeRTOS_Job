@@ -1,32 +1,32 @@
 #######################################
-# Syntax Coloring Map for MCP23017
+# Syntax Coloring Map for Maroni(FreeRTOS extensions library)
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-JobInfo	KEYWORD1
-Job	KEYWORD1
+jobInfo	KEYWORD1
+job	KEYWORD1
 Dispatcher	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-Init	KEYWORD2
-Start	KEYWORD2
-Create	KEYWORD2
-Invoke	KEYWORD2
-Interrupt	KEYWORD2
-Pause	KEYWORD2
-PauseFlg	KEYWORD2
-Cancel	KEYWORD2
-Resume	KEYWORD2
-Report	KEYWORD2
-Wait	KEYWORD2
-Action	KEYWORD2
-Fork	KEYWORD2
+init	KEYWORD2
+start	KEYWORD2
+create	KEYWORD2
+invoke	KEYWORD2
+interrupt	KEYWORD2
+pause	KEYWORD2
+pauseFlg	KEYWORD2
+cancel	KEYWORD2
+resume	KEYWORD2
+report	KEYWORD2
+wait	KEYWORD2
+action	KEYWORD2
+fork	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

@@ -1,78 +1,105 @@
-#include "Job.h"
+/*
+The MIT License (MIT)
+
+Copyright (c) 2018 Koichi Nishino
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#include "job.h"
 
 
-void Job::Init(Job* parent, void (*execute)(Job* job)) {
-  this->Execute = execute;
-  this->parent = (NULL == parent) ? this : parent->parent;
-  this->is_paused = false;
-  this->is_canceled = false;
-  this->is_completed = false;
-  this->is_scheduled = false;
-  this->progress = 0;
+void job::init(job* _parent, void (*func)(job*), void* arg, void* ret) {
+  execute = func;
+  parent = (NULL == _parent) ? this : _parent;
+  is_paused = false;
+  is_canceled = false;
+  is_completed = false;
+  is_scheduled = false;
+  progress = 0;
+  arguments = arg;
+  result = ret;
 }
 
-void Job::Dispatch() {
-  while (this->parent->is_paused) {
+void job::dispatch() {
+  while (parent->is_paused) {
     taskYIELD();
   }
-  if (this->parent->is_canceled) {
+  if (parent->is_canceled) {
     //キャンセル
   } else {
-    this->Execute(parent);
+	Serial.println(">>>");
+    execute(parent);
+	Serial.println("<<<");
   }
-  this->is_completed = true;
+  is_completed = true;
 }
 
-void Job::Wait() {
-  while (!this->is_completed) {
+void job::wait() {
+  while (!is_completed) {
     taskYIELD();
   }
 }
 
-void Job::Cancel() {
-  this->is_canceled = true;
-  if (this->parent != this) {
-    this->parent->Cancel();
+void job::cancel() {
+  is_canceled = true;
+  if (parent != this) {
+    parent->cancel();
   }
 }
 
-void Job::Resume() {
-  this->is_paused = false;
-  if (this->parent != this) {
-    this->parent->Resume();
+void job::resume() {
+  is_paused = false;
+  if (parent != this) {
+    parent->resume();
   }
 }
 
-void Job::Pause() {
-  this->is_paused = true;
-  if (this->parent != this) {
-    this->parent->Pause();
+void job::pause() {
+  is_paused = true;
+  if (parent != this) {
+    parent->pause();
   }
 }
 
-void Job::Report(int progress) {
-  this->progress = progress;
+void job::report(int progress) {
+  progress = progress;
 }
 
-void Job::Action(Job* job1) {
-  job1->Wait();
+void job::action(job* job1) {
+  job1->wait();
 }
 
-void Job::Fork(Job* job1, Job* job2) {
-  job1->Wait();
-  job2->Wait();
+void job::fork(job* job1, job* job2) {
+  job1->wait();
+  job2->wait();
 }
 
-void Job::Fork(Job* job1, Job* job2, Job* job3) {
-  job1->Wait();
-  job2->Wait();
-  job3->Wait();
+void job::fork(job* job1, job* job2, job* job3) {
+  job1->wait();
+  job2->wait();
+  job3->wait();
 }
 
-void Job::Fork(Job* job1, Job* job2, Job* job3, Job* job4) {
-  job1->Wait();
-  job2->Wait();
-  job3->Wait();
-  job4->Wait();
+void job::fork(job* job1, job* job2, job* job3, job* job4) {
+  job1->wait();
+  job2->wait();
+  job3->wait();
+  job4->wait();
 }
 
