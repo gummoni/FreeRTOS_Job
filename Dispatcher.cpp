@@ -28,17 +28,16 @@ THE SOFTWARE.
 
 #ifdef ESP_H
 void dispatcher::start(const char* name, int size, int priority, int coreId) {
-  this->queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(job*));  //MAX_QUEUE_COUNTŒÂ * 4byte(pointer•ª)
+  this->queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(job*));  //MAX_QUEUE_COUNTå€‹ * 4byte(pointeråˆ†)
   xTaskCreatePinnedToCore(TaskMain, name, size, this, priority, &this->taskHandler, coreId);
 }
 #else//ESP_H
 void dispatcher::start(const char* name, int size, int priority) {
-  this->queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(job*));  //MAX_QUEUE_COUNTŒÂ * 4byte(pointer•ª)
+  this->queueHandler = xQueueCreate(MAX_QUEUE_COUNT, sizeof(job*));  //MAX_QUEUE_COUNTå€‹ * 4byte(pointeråˆ†)
   xTaskCreate(TaskMain, name, size, this, priority, &this->taskHandler);
 }
 #endif//ESP_H
 
-//ˆ—ˆÚ÷
 job* dispatcher::invoke(job* parent, void (*func)(job*), void* arg, void* ret) {
   job* pjob = jobs.create(parent, func, arg, ret);
   TaskHandle_t currentTaskHandler = xTaskGetCurrentTaskHandle();
@@ -51,7 +50,6 @@ job* dispatcher::invoke(job* parent, void (*func)(job*), void* arg, void* ret) {
   return pjob;
 }
 
-//ˆ—ˆÚ÷i—Dæ‡ˆÊF‚‚ßj
 job* dispatcher::interrupt(job* parent, void (*func)(job*), void* arg, void* ret) {
   job* pjob = jobs.create(parent, func, arg, ret);
   TaskHandle_t currentTaskHandler = xTaskGetCurrentTaskHandle();
@@ -64,7 +62,6 @@ job* dispatcher::interrupt(job* parent, void (*func)(job*), void* arg, void* ret
   return pjob;
 }
 
-//ƒfƒBƒXƒpƒbƒ`ƒƒƒ^ƒXƒNƒƒCƒ“
 void dispatcher::TaskMain(void* arg) {
   job* pjob;
   dispatcher* self = (dispatcher*)arg;

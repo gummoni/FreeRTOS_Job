@@ -4,6 +4,9 @@
 #define LED (LED_BUILTIN)
 #define delay2(value) vTaskDelay(value / portTICK_PERIOD_MS)
 
+////////////////////////////////////////////////////////////////////////
+// led task
+////////////////////////////////////////////////////////////////////////
 class ledWorker : dispatcher {
 
     static void blink1(job* p) {
@@ -31,11 +34,11 @@ class ledWorker : dispatcher {
     }
 
     job* blink1Async(job* parent) {
-      return invoke(parent, blink1, NULL, NULL);
+      return invoke(parent, blink1, this, NULL);
     }
 
     job* blink2Async(job* parent) {
-      return invoke(parent, blink2, NULL, NULL);
+      return invoke(parent, blink2, this, NULL);
     }
 };
 
@@ -53,8 +56,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("--go--");
-  Serial.println(1000 / portTICK_PERIOD_MS);
   job* pjob1 = led.blink1Async(NULL);
   job* pjob2 = led.blink2Async(NULL);
 

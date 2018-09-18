@@ -39,13 +39,13 @@ void jobFactory::clear() {
   index = 0;
 }
 
-job* jobFactory::create(job* pjob, void (*func)(job*), void* arg, void* ret) {
+job* jobFactory::create(job* parent, void (*func)(job*), void* obj, void* arg) {
   while (!jobs[index].is_completed) {
     index++;
     if (MAX_JOB_COUNT <= index) index = 0;
   }
   job* result = &jobs[index];
-  result->init(pjob, func, arg, ret);
+  result->init(parent, func, obj, arg);
   return result;
 }
 

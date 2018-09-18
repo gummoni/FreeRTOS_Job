@@ -24,7 +24,7 @@ THE SOFTWARE.
 #include "job.h"
 
 
-void job::init(job* _parent, void (*func)(job*), void* arg, void* ret) {
+void job::init(job* _parent, void (*func)(job*), void* obj, void* _arg) {
   execute = func;
   parent = (NULL == _parent) ? this : _parent;
   is_paused = false;
@@ -32,20 +32,16 @@ void job::init(job* _parent, void (*func)(job*), void* arg, void* ret) {
   is_completed = false;
   is_scheduled = false;
   progress = 0;
-  arguments = arg;
-  result = ret;
+  self = obj;
+  arg = _arg;
 }
 
 void job::dispatch() {
   while (parent->is_paused) {
     taskYIELD();
   }
-  if (parent->is_canceled) {
-    //キャンセル
-  } else {
-	Serial.println(">>>");
+  if (!parent->is_canceled) {
     execute(parent);
-	Serial.println("<<<");
   }
   is_completed = true;
 }

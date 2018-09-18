@@ -6,27 +6,32 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-jobInfo	KEYWORD1
 job	KEYWORD1
-Dispatcher	KEYWORD1
+dispatcher	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+is_paused	KEYWORD2
+is_canceled	KEYWORD2
+is_completed	KEYWORD2
+is_scheduled	KEYWORD2
+progress	KEYWORD2
+self	KEYWORD2
+arg	KEYWORD2
 
 init	KEYWORD2
 start	KEYWORD2
-create	KEYWORD2
-invoke	KEYWORD2
-interrupt	KEYWORD2
-pause	KEYWORD2
-pauseFlg	KEYWORD2
+wait	KEYWORD2
 cancel	KEYWORD2
 resume	KEYWORD2
+pause	KEYWORD2
 report	KEYWORD2
-wait	KEYWORD2
 action	KEYWORD2
 fork	KEYWORD2
+
+invoke	KEYWORD2
+interrupt	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

@@ -31,7 +31,7 @@ class jobFactory {
   public:
     jobFactory();
     void clear();
-    job* create(job* pjob, void (*func)(job*), void* arg, void* ret);
+    job* create(job* parent, void (*func)(job*), void* obj, void* arg);
 };
 
 extern jobFactory jobs;

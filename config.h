@@ -36,8 +36,6 @@ THE SOFTWARE.
 #include "semphr.h"
 #endif//ESP_H
 
-//最大ジョブ発行数
 #define MAX_JOB_COUNT	(32)
 
-//最大ジョブキュー数
 #define MAX_QUEUE_COUNT	(8)
