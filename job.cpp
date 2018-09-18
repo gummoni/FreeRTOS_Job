@@ -25,13 +25,14 @@ THE SOFTWARE.
 
 
 void job::init(job* _parent, void (*func)(job*), void* obj, void* _arg) {
+  publish = NULL;
   execute = func;
   parent = (NULL == _parent) ? this : _parent;
   is_paused = false;
   is_canceled = false;
   is_completed = false;
   is_scheduled = false;
-  progress = 0;
+  progress = NULL;
   self = obj;
   arg = _arg;
 }
@@ -73,8 +74,28 @@ void job::pause() {
   }
 }
 
-void job::report(int progress) {
-  progress = progress;
+void job::report(int _progress) {
+  if (progress != _progress) {
+    progress = _progress;
+
+    if (NULL != publish) {
+      // publish
+      publish(this);
+    }
+  }
+}
+
+void job::subscribe(void (*subscriber)(job*)) {
+  publish = subscriber;
+
+  if (NULL != progress) {
+    //publish
+    publish(this);
+  }
+}
+
+void job::unsubscribe() {
+  publish = NULL;
 }
 
 void job::action(job* job1) {

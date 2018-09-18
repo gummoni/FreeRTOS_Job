@@ -29,9 +29,12 @@ pause	KEYWORD2
 report	KEYWORD2
 action	KEYWORD2
 fork	KEYWORD2
+subcribe	KEYWORD2
+unsubcribe	KEYWORD2
 
 invoke	KEYWORD2
 interrupt	KEYWORD2
+
 
 #######################################
 # Constants (LITERAL1)

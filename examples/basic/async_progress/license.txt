@@ -21,37 +21,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#pragma once
-#include "config.h"
-
-#define DelayMS(milliSeconds) (milliSeconds / portTICK_PERIOD_MS)
-
-
-class job {
-  public:
-    void (*publish)(job*);
-    void (*execute)(job*);
-    job* parent;
-    bool is_paused;
-    bool is_canceled;
-    bool is_completed;
-    bool is_scheduled;
-    int progress;
-    void* self;
-    void* arg;
-
-    void init(job* _parent, void (*func)(job*), void* obj, void* arg);
-    void dispatch();
-    void wait();
-    void cancel();
-    void resume();
-    void pause();
-    void report(int progress);
-    void action(job* job1);
-    void fork(job* job1, job* job2);
-    void fork(job* job1, job* job2, job* job3);
-    void fork(job* job1, job* job2, job* job3, job* job4);
-    void subscribe(void (*subscriber)(job*));
-    void unsubscribe();
-};
-
